@@ -8,9 +8,7 @@ const _ = require("lodash");
 const atlasPass = process.env.ATLAS_PASS;
 
 app.set("view engine", "ejs");
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+app.use(bodyParser());
 app.use(express.static("public"));
 
 app.use(function(req, res, next) {
@@ -47,6 +45,12 @@ app.route("/articles")
   })
   // POST
   .post(function(req, res) {
+    console.log(req.body)
+    // console.log(req.body.name)
+    // console.log(req.body.email)
+    // console.log(req.body.title)
+    // console.log(req.body.content)
+
     const newArticle = new Article({
       name: req.body.name,
       email: req.body.email,
@@ -149,7 +153,7 @@ app.route("/articles/:articleName")
 
   let port = process.env.PORT;
   if (port == null || port == "") {
-    port = 3000;
+    port = 2000;
   }
 
   app.listen(port, function() {
