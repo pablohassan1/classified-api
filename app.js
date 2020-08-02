@@ -12,17 +12,19 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(express.static("public"));
-mongoose.connect("mongodb+srv://admin-jan:" + atlasPass + "@cluster0.njvgj.mongodb.net/wikiDB", {
+mongoose.connect("mongodb+srv://admin-jan:" + atlasPass + "@cluster0.njvgj.mongodb.net/classifiedApp", {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
 
-const wikiSchema = {
+const dbSchema = {
+  name: String,
+  email: String,
   title: String,
   content: String
 };
 
-const Article = mongoose.model("Article", wikiSchema);
+const Article = mongoose.model("Article", dbSchema);
 
 // "/articles"
 // GET
@@ -39,6 +41,8 @@ app.route("/articles")
   // POST
   .post(function(req, res) {
     const newArticle = new Article({
+      name: req.body.name,
+      email: req.body.email,
       title: _.capitalize(req.body.title),
       content: req.body.content
     });
@@ -133,7 +137,6 @@ app.route("/articles/:articleName")
       }
     });
   });
-
 
 
 
