@@ -46,15 +46,12 @@ app.route("/articles")
   // POST
   .post(function(req, res) {
     console.log(req.body)
-    // console.log(req.body.name)
-    // console.log(req.body.email)
-    // console.log(req.body.title)
-    // console.log(req.body.content)
+    
 
     const newArticle = new Article({
       name: req.body.name,
       email: req.body.email,
-      title: _.capitalize(req.body.title),
+      title: req.body.title,
       content: req.body.content
     });
     newArticle.save(function(err) {
