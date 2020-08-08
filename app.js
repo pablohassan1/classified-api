@@ -46,7 +46,7 @@ app.route("/articles")
   // POST
   .post(function(req, res) {
     console.log(req.body)
-    
+
 
     const newArticle = new Article({
       name: req.body.name,
@@ -80,7 +80,7 @@ app.route("/articles/:articleName")
     const articleName = _.capitalize(req.params.articleName.replace(/-/g, " "));
     console.log(articleName);
     Article.findOne({
-      title: articleName
+      _id: articleName
     }, function(err, foundArticle) {
       if (!err) {
         if (foundArticle) {
