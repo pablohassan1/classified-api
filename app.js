@@ -62,16 +62,7 @@ app.route("/articles")
       }
     });
   })
-  // DELETE all
-  .delete(function(req, res) {
-    Article.deleteMany(function(err, deletedArticles) {
-      if (!err) {
-        res.send("Deleted all articles.");
-      } else {
-        res.send(err);
-      }
-    });
-  });
+  
 
 // "/articles/[article]"
 app.route("/articles/:articleName")
@@ -92,59 +83,8 @@ app.route("/articles/:articleName")
         res.send(err);
       }
     });
-  })
-  // PUT an article
-  .put(function(req, res) {
-    const articleName = _.capitalize(req.params.articleName.replace(/-/g, " "));
-    Article.updateOne({
-      title: articleName
-    }, {
-      title: req.body.title,
-      content: req.body.content
-    }, {
-      overwrite: true
-    }, function(err, updatedArticle) {
-      if (!err) {
-        if (updatedArticle) {
-          res.send("Article " + articleName + " has been updated.");
-        } else {
-          res.send("Article not found.");
-        }
-      } else {
-        res.send(err);
-      }
-    });
-  })
-  // PATCH an article
-  .patch(function(req, res) {
-    const articleName = _.capitalize(req.params.articleName.replace(/-/g, " "));
-    Article.updateOne({
-      title: articleName
-    }, {
-      $set: req.body
-    },function(err, updatedArticle) {
-      if (!err) {
-        if (updatedArticle) {
-          res.send("Article " + articleName + " has been updated.");
-        } else {
-          res.send("Article not found.");
-        }
-      } else {
-        res.send(err);
-      }
-    });
-  })
-  // DELETE an article
-  .delete(function(req, res){
-    const articleName = _.capitalize(req.params.articleName.replace(/-/g, " "));
-    Article.deleteOne({title: articleName},function(err){
-      if(!err){
-        res.send("Article " + articleName + " deleted.");
-      }else{
-        res.send(err);
-      }
-    });
   });
+  
 
 
 
