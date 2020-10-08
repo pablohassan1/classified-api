@@ -25,19 +25,18 @@ mongoose.connect("mongodb+srv://admin-jan:" + atlasPass + "@cluster0.njvgj.mongo
 const dbSchema = {
   name: String,
   email: String,
-  title: String,
-  content: String
+  phone: String
 };
 
-const Article = mongoose.model("Article", dbSchema);
+const Record = mongoose.model("Record", dbSchema);
 
 // "/articles"
 // GET
-app.route("/articles")
+app.route("/records")
   .get(function(req, res) {
-    Article.find(function(err, foundArticles) {
+    Record.find(function(err, foundRecords) {
       if (!err) {
-        res.send(foundArticles);
+        res.send(foundRecords);
       } else {
         res.send(err);
       }
@@ -47,16 +46,14 @@ app.route("/articles")
   .post(function(req, res) {
     console.log(req.body)
 
-
-    const newArticle = new Article({
+    const newRecord = new Record({
       name: req.body.name,
       email: req.body.email,
-      title: req.body.title,
-      content: req.body.content
+      phone: req.body.phone      
     });
-    newArticle.save(function(err) {
+    newRecord.save(function(err) {
       if (!err) {
-        res.send("New article created.");
+        res.send("New record created.");
       } else {
         res.send(err);
       }
@@ -64,26 +61,77 @@ app.route("/articles")
   })
   
 
-// "/articles/[article]"
-app.route("/articles/:articleName")
-  // GET an article
-  .get(function(req, res) {
-    const articleName = _.capitalize(req.params.articleName.replace(/-/g, " "));
-    console.log(articleName);
-    Article.findOne({
-      _id: articleName
-    }, function(err, foundArticle) {
+// "/records/[record]"
+app.route("/records/:recordId")
+  // GET a record
+  .get(function(req, res) {    
+    Record.findOne({
+      _id: recordId
+    }, function(err, foundRecord) {
       if (!err) {
-        if (foundArticle) {
-          res.send(foundArticle);
+        if (foundRecord) {
+          res.send(foundRecord);
         } else {
-          res.send("Article not found.");
+          res.send("Record not found.");
         }
       } else {
         res.send(err);
       }
     });
+  })
+
+  // PUT an article
+  .put(function(req, res) {    
+    Record.updateOne({
+      _id: recordId
+    }, {
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone
+    }, {
+      overwrite: true
+    }, function(err, updatedRecord) {
+      if (!err) {
+        if (updatedRecord) {
+          res.send("Record " + recordId + " has been updated.");
+        } else {
+          res.send("Record not found.");
+        }
+      } else {
+        res.send(err);
+      }
+    });
+  })
+  // PATCH an article
+  .patch(function(req, res) {
+    
+    Record.updateOne({
+      _id: recordId
+    }, {
+      $set: req.body
+    },function(err, updatedRecord) {
+      if (!err) {
+        if (updatedRecord) {
+          res.send("Record " + recordId + " has been updated.");
+        } else {
+          res.send("Record not found.");
+        }
+      } else {
+        res.send(err);
+      }
+    });
+  })
+  // DELETE an article
+  .delete(function(req, res){    
+    Record.deleteOne({_id: recordId},function(err){
+      if(!err){
+        res.send("Record " + recordId + " deleted.");
+      }else{
+        res.send(err);
+      }
+    });
   });
+
   
 
 
